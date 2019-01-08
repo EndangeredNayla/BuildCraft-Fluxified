@@ -1,0 +1,16 @@
+[
+{
+  "modid": "gtcefe",
+  "name": "Gregtech CE FE Compat",
+  "description": "Adds forge energy capability to gregtech community edition machinery",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["DBotThePony"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

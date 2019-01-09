@@ -32,13 +32,20 @@ public class EnergyProviderItem implements ICapabilityProvider {
 	private final ItemStack upvalue;
 	private ItemEnergyContainerWrapper rfwrapper;
 	private GregicEnergyContainerWrapper wrapper;
+	private final boolean valid;
 
 	public EnergyProviderItem(ItemStack entCap) {
 		upvalue = entCap;
+
+		valid = entCap.getCount() == 1;
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (!valid) {
+			return false;
+		}
+
 		if (capability == CapabilityEnergy.ENERGY) {
 			if (rfwrapper == null) {
 				rfwrapper = new ItemEnergyContainerWrapper(upvalue.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null));

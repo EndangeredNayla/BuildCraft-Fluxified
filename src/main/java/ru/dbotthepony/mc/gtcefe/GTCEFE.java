@@ -59,6 +59,6 @@ public class GTCEFE {
 
 	@SubscribeEvent
 	public void attachItemCapability(AttachCapabilitiesEvent<ItemStack> event) {
-		event.addCapability(resourceLocation, new EnergyProvider(event.getObject()));
+		event.addCapability(resourceLocation, new EnergyProviderItem(event.getObject()));
 	}
 }

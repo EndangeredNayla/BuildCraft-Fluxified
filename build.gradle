@@ -55,7 +55,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile files("gregtech-1.12.2-1.0.1488.jar")
+    compile files("gtce.jar")
 }
 
 processResources {

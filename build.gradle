@@ -58,6 +58,10 @@ dependencies {
     compile files("gtce.jar")
 }
 
+sourceSets.api.java {
+    srcDir "BuildCraftAPI/api"
+}
+
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version

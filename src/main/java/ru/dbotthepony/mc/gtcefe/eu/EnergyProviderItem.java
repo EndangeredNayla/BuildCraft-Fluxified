@@ -18,8 +18,8 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-package ru.dbotthepony.mc.gtcefe;
-
+package ru.dbotthepony.mc.gtcefe.eu;
+import ru.dbotthepony.mc.gtcefe.GTCEFE;
 
 import gregtech.api.capability.GregtechCapabilities;
 import net.minecraft.item.ItemStack;

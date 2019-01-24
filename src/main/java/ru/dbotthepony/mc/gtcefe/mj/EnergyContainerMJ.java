@@ -50,7 +50,8 @@ class EnergyContainerMJ implements IEnergyStorage {
 	}
 
 	boolean isValid() {
-		return this.upvalue.hasCapability(MjAPI.CAP_RECEIVER, this.face);
+		return this.upvalue.hasCapability(MjAPI.CAP_RECEIVER, this.face) ||
+			this.upvalue.hasCapability(MjAPI.CAP_CONNECTOR, this.face);
 	}
 
 	EnergyContainerMJ updateValues() {
@@ -67,31 +68,6 @@ class EnergyContainerMJ implements IEnergyStorage {
 		return this;
 	}
 
-	int antiOverflow(long value) {
-		if (value > Integer.MAX_VALUE) {
-			return Integer.MAX_VALUE;
-		}
-
-		return (int) value;
-	}
-
-	int toRF(long microJoules) {
-		long ratio = BCFE.conversionRatio();
-
-		if (microJoules < ratio) {
-			return 0;
-		}
-
-		microJoules -= microJoules % ratio;
-		microJoules /= ratio;
-
-		return antiOverflow(microJoules);
-	}
-
-	long fromRF(int rf) {
-		return rf * BCFE.conversionRatio();
-	}
-
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
 		if (!canReceive()) {
@@ -104,7 +80,7 @@ class EnergyContainerMJ implements IEnergyStorage {
 			return 0;
 		}
 
-		long value = fromRF(maxReceive);
+		long value = EnergyProviderMJ.fromRF(maxReceive);
 		long simulated = receiver.receivePower(value, true);
 
 		if (simulated == 0L) {
@@ -130,10 +106,10 @@ class EnergyContainerMJ implements IEnergyStorage {
 		}
 
 		if (!simulate) {
-			return toRF(value - receiver.receivePower(value, false));
+			return EnergyProviderMJ.toRF(value - receiver.receivePower(value, false));
 		}
 
-		return toRF(value - simulated);
+		return EnergyProviderMJ.toRF(value - simulated);
 	}
 
 	@Override
@@ -142,7 +118,7 @@ class EnergyContainerMJ implements IEnergyStorage {
 			return 0;
 		}
 
-		long value = fromRF(maxExtract);
+		long value = EnergyProviderMJ.fromRF(maxExtract);
 		long simulated = passive.extractPower(BCFE.conversionRatio(), value, true);
 
 		simulated -= simulated % BCFE.conversionRatio();
@@ -152,10 +128,10 @@ class EnergyContainerMJ implements IEnergyStorage {
 		}
 
 		if (!simulate) {
-			return toRF(passive.extractPower(BCFE.conversionRatio(), simulated, true));
+			return EnergyProviderMJ.toRF(passive.extractPower(BCFE.conversionRatio(), simulated, true));
 		}
 
-		return toRF(simulated);
+		return EnergyProviderMJ.toRF(simulated);
 	}
 
 	int calcMaxReceive() {
@@ -168,12 +144,12 @@ class EnergyContainerMJ implements IEnergyStorage {
 
 	@Override
 	public int getEnergyStored() {
-		return read != null ? toRF(read.getStored()) : 0;
+		return read != null ? EnergyProviderMJ.toRF(read.getStored()) : 0;
 	}
 
 	@Override
 	public int getMaxEnergyStored() {
-		return read != null ? toRF(read.getCapacity()) : 0;
+		return read != null ? EnergyProviderMJ.toRF(read.getCapacity()) : 0;
 	}
 
 	@Override

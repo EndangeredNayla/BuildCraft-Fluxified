@@ -1,8 +1,8 @@
 [
 {
   "modid": "gtcefe",
-  "name": "Gregtech CE FE Compat",
-  "description": "Adds forge energy capability to gregtech community edition machinery",
+  "name": "Gregic Power",
+  "description": "Provides FE capability for MJ tiles and GregTech Community Edition EU tiles/items",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

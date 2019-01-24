@@ -27,7 +27,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ru.dbotthepony.mc.gtcefe.eu.EnergyProvider;
@@ -36,7 +38,7 @@ import ru.dbotthepony.mc.gtcefe.eu.EnergyProviderItem;
 @Mod(
 	modid = GTCEFE.MODID,
 	name = GTCEFE.NAME,
-	dependencies = "required:gregtech;after:buildcraft;",
+	dependencies = "after:gregtech;",
 	version = GTCEFE.VERSION)
 public class GTCEFE {
 	public static final String MODID = "gtcefe";
@@ -49,11 +51,18 @@ public class GTCEFE {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(this);
 		resourceLocation = new ResourceLocation(GTCEFE.MODID, "fecapability");
 		logger = event.getModLog();
 	}
 
+	@Mod.EventHandler
+	public void init(FMLInitializationEvent event) {
+		if (!Loader.isModLoaded("gregtech")) {
+			return;
+		}
+
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 	@SubscribeEvent
 	public void attachTileCapability(AttachCapabilitiesEvent<TileEntity> event) {
 		event.addCapability(resourceLocation, new EnergyProvider(event.getObject()));

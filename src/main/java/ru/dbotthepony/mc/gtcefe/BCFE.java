@@ -41,10 +41,10 @@ import ru.dbotthepony.mc.gtcefe.mj.EnergyProviderMJ;
 	version = BCFE.VERSION)
 public class BCFE {
 	public static final String MODID = "bcfe";
-	public static final String NAME = "BCFE-FE";
+	public static final String NAME = "BuildCraft FE Adapter";
 	public static final String VERSION = "1.0";
-	public static final long RATIO = 10;
-	public static final int RATIO_INT = 10;
+	public static final long RATIO = 40;
+	public static final int RATIO_INT = 40;
 
 	public ResourceLocation resourceLocation;
 	public static Logger logger;

@@ -98,31 +98,38 @@ class EnergyContainerMJ implements IEnergyStorage {
 			return 0;
 		}
 
+		maxReceive = Math.min(calcMaxReceive(), maxReceive);
+
 		long value = fromRF(maxReceive);
 		long simulated = receiver.receivePower(value, true);
 
-		if (simulated == value && !simulate) {
-			return toRF(receiver.receivePower(value, false));
+		if (simulated == 0L) {
+			if (!simulate) {
+				receiver.receivePower(value, false);
+			}
+
+			return maxReceive;
 		}
 
-		if (simulated == value && simulate) {
-			return toRF(simulated);
+		value -= simulated;
+
+		long ratio = BCFE.conversionRatio();
+
+		if (value % ratio != 0) {
+			value -= value % ratio;
 		}
 
-		if (simulated != value) {
-			simulated -= simulated % BCFE.conversionRatio();
-			simulated = receiver.receivePower(value, true);
-		}
+		simulated = receiver.receivePower(value, true);
 
-		if (simulated != receiver.receivePower(simulated, true)) {
+		if (simulated % ratio != 0) {
 			return 0;
 		}
 
 		if (!simulate) {
-			return toRF(receiver.receivePower(simulated, false));
+			return toRF(value - receiver.receivePower(value, false));
 		}
 
-		return toRF(simulated);
+		return toRF(value - simulated);
 	}
 
 	@Override
@@ -132,21 +139,27 @@ class EnergyContainerMJ implements IEnergyStorage {
 		}
 
 		long value = fromRF(maxExtract);
-		long simulated = passive.extractPower(value, value, true);
+		long simulated = passive.extractPower(BCFE.conversionRatio(), value, true);
+
+		simulated -= simulated % BCFE.conversionRatio();
 
 		if (simulated == 0L) {
 			return 0;
 		}
 
-		if (simulated == value) {
-			if (!simulate) {
-				return toRF(passive.extractPower(value, value, true));
-			}
-
-			return toRF(simulated);
+		if (!simulate) {
+			return toRF(passive.extractPower(BCFE.conversionRatio(), simulated, true));
 		}
 
-		return 0;
+		return toRF(simulated);
+	}
+
+	int calcMaxReceive() {
+		if (read == null) {
+			return Integer.MAX_VALUE;
+		}
+
+		return getMaxEnergyStored() - getEnergyStored();
 	}
 
 	@Override

@@ -40,7 +40,7 @@ import ru.dbotthepony.mc.gtcefe.eu.EnergyProviderItem;
 	version = GTCEFE.VERSION)
 public class GTCEFE {
 	public static final String MODID = "gtcefe";
-	public static final String NAME = "GTCE-FE";
+	public static final String NAME = "GregTechCE FE Adapter";
 	public static final String VERSION = "1.0";
 	public static final long RATIO = 4;
 	public static final int RATIO_INT = 4;

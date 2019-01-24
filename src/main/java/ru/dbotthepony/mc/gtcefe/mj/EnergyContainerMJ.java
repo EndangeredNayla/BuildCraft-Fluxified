@@ -100,6 +100,10 @@ class EnergyContainerMJ implements IEnergyStorage {
 
 		maxReceive = Math.min(calcMaxReceive(), maxReceive);
 
+		if (maxReceive == 0) {
+			return 0;
+		}
+
 		long value = fromRF(maxReceive);
 		long simulated = receiver.receivePower(value, true);
 

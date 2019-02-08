@@ -15,4 +15,4 @@ put it in repository folder and rename it to `gtce.jar`; launch `git submodules 
 
 This is required since i don't repack gregtech community edition's APIs
 
-Or grab [precompiled for Minecraft 1.12.2 version](https://i.dbotthepony.ru/2019/01/gtcefe-1.0.jar)
+Or grab [precompiled for Minecraft 1.12.2 version](https://i.dbotthepony.ru/2019/02/gtcefe-1.0.jar)

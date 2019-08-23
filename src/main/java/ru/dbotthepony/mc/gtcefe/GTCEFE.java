@@ -43,11 +43,15 @@ import ru.dbotthepony.mc.gtcefe.eu.EnergyProviderItem;
 public class GTCEFE {
 	public static final String MODID = "gtcefe";
 	public static final String NAME = "GregTechCE FE Adapter";
-	public static final String VERSION = "1.0";
+	public static final String VERSION = "1.1-1.8.5.436";
 	public static final long RATIO = 4;
 	public static final int RATIO_INT = 4;
 	public ResourceLocation resourceLocation;
 	public static Logger logger;
+
+	public static final long MAX_VALUE_AS_LONG = Long.MAX_VALUE / RATIO;
+	public static final long OVERFLOW_CHECK = Integer.MAX_VALUE / RATIO;
+	public static final int MAX_VALUE_AS_INT = Integer.MAX_VALUE / RATIO_INT;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

@@ -52,12 +52,17 @@ public class ItemEnergyContainerWrapper implements IEnergyStorage {
 
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
-		if (!canReceive()) {
+		/* if (!canReceive()) {
 			return 0;
 		}
 
 		if (container.getMaxCharge() <= 0) {
 			return 0;
+		} */
+
+		if (maxReceive == 1 && simulate) {
+			// assuming we hit mekanism or enderio charger
+			maxReceive = Integer.MAX_VALUE;
 		}
 
 		int speed = getMaxSpeed();
@@ -74,23 +79,31 @@ public class ItemEnergyContainerWrapper implements IEnergyStorage {
 
 		long simulated = container.charge(maxReceive / GTCEFE.RATIO, Integer.MAX_VALUE, false, true);
 
-		//if (simulated < 0L) {
-		if (simulated < 0L || simulated < itemVoltage()) {
+		if (simulated < 0L) {
+		// if (simulated < 0L || simulated < itemVoltage()) {
 			return 0;
 		}
 
-		container.charge(simulated, Integer.MAX_VALUE, false, false);
+		if (!simulate) {
+			container.charge(simulated, Integer.MAX_VALUE, false, false);
+		}
+
 		return (int) (simulated * GTCEFE.RATIO);
 	}
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		if (!canExtract()) {
+		/* if (!canExtract()) {
 			return 0;
 		}
 
 		if (container.getMaxCharge() <= 0) {
 			return 0;
+		} */
+
+		if (maxExtract == 1 && simulate) {
+			// assuming we hit mekanism
+			maxExtract = Integer.MAX_VALUE;
 		}
 
 		int speed = getMaxSpeed();
@@ -108,11 +121,14 @@ public class ItemEnergyContainerWrapper implements IEnergyStorage {
 		long simulated = container.discharge(maxExtract / GTCEFE.RATIO, Integer.MAX_VALUE, false, true, true);
 
 		if (simulated < 0L) {
-		//if (simulated < 0L || simulated < itemVoltage()) {
+		// if (simulated < 0L || simulated < itemVoltage()) {
 			return 0;
 		}
 
-		container.discharge(simulated, Integer.MAX_VALUE, false, true, false);
+		if (!simulate) {
+			container.discharge(simulated, Integer.MAX_VALUE, false, true, false);
+		}
+
 		return (int) (simulated * GTCEFE.RATIO);
 	}
 
@@ -120,9 +136,9 @@ public class ItemEnergyContainerWrapper implements IEnergyStorage {
 	// using workaround
 	@Override
 	public int getEnergyStored() {
-		long value = container.discharge(Long.MAX_VALUE, Integer.MAX_VALUE, true, false, true);
+		long value = container.getCharge();
 
-		if (value > Integer.MAX_VALUE / GTCEFE.RATIO - 1) {
+		if (value >= GTCEFE.MAX_VALUE_AS_LONG || value > GTCEFE.OVERFLOW_CHECK) {
 			return Integer.MAX_VALUE;
 		}
 
@@ -131,15 +147,13 @@ public class ItemEnergyContainerWrapper implements IEnergyStorage {
 
 	@Override
 	public int getMaxEnergyStored() {
-		long discharge = container.discharge(Long.MAX_VALUE, Integer.MAX_VALUE, true, false, true);
-		long charge = container.charge(Long.MAX_VALUE, Integer.MAX_VALUE, true, true);
-		long diff = discharge + charge;
+		long value = container.getMaxCharge();
 
-		if (diff > Integer.MAX_VALUE / GTCEFE.RATIO - 1) {
+		if (value >= GTCEFE.MAX_VALUE_AS_LONG || value > GTCEFE.OVERFLOW_CHECK) {
 			return Integer.MAX_VALUE;
 		}
 
-		return (int) (diff * GTCEFE.RATIO);
+		return (int) (value * GTCEFE.RATIO);
 	}
 
 	@Override
@@ -149,6 +163,6 @@ public class ItemEnergyContainerWrapper implements IEnergyStorage {
 
 	@Override
 	public boolean canReceive() {
-		return container.charge(Long.MAX_VALUE, Integer.MAX_VALUE, true, true) != 0L;
+		return container.charge(container.getTransferLimit(), Integer.MAX_VALUE, true, true) != 0L;
 	}
 }

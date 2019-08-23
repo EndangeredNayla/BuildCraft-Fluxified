@@ -87,32 +87,46 @@ public class EnergyContainerWrapper implements IEnergyStorage {
 			return 0;
 		}
 
+		if (maxReceive == 1 && simulate) {
+			// assuming we hit mekanism
+			return container.getEnergyCanBeInserted() > 0L ? 1 : 0;
+		}
+
 		int speed = maxSpeedIn();
 
 		if (maxReceive > speed) {
 			maxReceive = speed;
 		}
 
+		int voltageIn = voltageIn();
+
 		maxReceive -= maxReceive % GTCEFE.RATIO_INT;
-		maxReceive -= maxReceive % voltageIn();
+		maxReceive -= maxReceive % voltageIn;
 
-		if (maxReceive <= 0 || maxReceive < voltageIn()) {
+		if (maxReceive <= 0 || maxReceive < voltageIn) {
 			return 0;
 		}
 
-		long missing = container.getEnergyCanBeInserted() * GTCEFE.RATIO;
+		long missing = container.getEnergyCanBeInserted();
 
-		if (missing <= 0L || missing < voltageIn()) {
+		if (missing <= 0L || missing < voltageIn) {
 			return 0;
 		}
+
+		if (missing >= GTCEFE.MAX_VALUE_AS_LONG) {
+			missing = GTCEFE.MAX_VALUE_AS_LONG;
+		}
+
+		missing *= GTCEFE.RATIO;
 
 		if (missing < maxReceive) {
 			maxReceive = (int) missing;
 		}
 
 		if (!simulate) {
-			int ampers = (int) container.acceptEnergyFromNetwork(this.facing, container.getInputVoltage(), maxReceive / (GTCEFE.RATIO * container.getInputVoltage()));
-			return ampers * voltageIn();
+			long voltage = container.getInputVoltage();
+			int ampers = (int) container.acceptEnergyFromNetwork(this.facing, voltage, maxReceive / (GTCEFE.RATIO * voltage));
+			return ampers * voltageIn;
 		}
 
 		return maxReceive;
@@ -137,17 +151,21 @@ public class EnergyContainerWrapper implements IEnergyStorage {
 			return 0;
 		}
 
-		long stored = container.getEnergyStored() * GTCEFE.RATIO;
+		long stored = container.getEnergyStored();
 
 		if (stored <= 0L) {
 			return 0;
 		}
 
+		if (stored >= GTCEFE.MAX_VALUE_AS_LONG) {
+			stored = GTCEFE.MAX_VALUE_AS_LONG;
+		}
+
+		stored *= GTCEFE.RATIO;
+
 		if (stored < maxExtract) {
 			maxExtract = (int) stored;
 		}
-
-		//GTCEFE.logger.info(maxExtract);
 
 		if (!simulate) {
 			return (int) (container.removeEnergy(maxExtract / GTCEFE.RATIO) * GTCEFE.RATIO);
@@ -158,24 +176,24 @@ public class EnergyContainerWrapper implements IEnergyStorage {
 
 	@Override
 	public int getEnergyStored() {
-		long stored = container.getEnergyStored() * GTCEFE.RATIO;
+		long value = container.getEnergyStored();
 
-		if (stored > Integer.MAX_VALUE) {
+		if (value >= GTCEFE.MAX_VALUE_AS_LONG || value > GTCEFE.OVERFLOW_CHECK) {
 			return Integer.MAX_VALUE;
 		}
 
-		return (int) stored;
+		return (int) (value * GTCEFE.RATIO);
 	}
 
 	@Override
 	public int getMaxEnergyStored() {
-		long maximal = container.getEnergyCapacity() * GTCEFE.RATIO;
+		long value = container.getEnergyCapacity();
 
-		if (maximal > Integer.MAX_VALUE) {
+		if (value >= GTCEFE.MAX_VALUE_AS_LONG || value > GTCEFE.OVERFLOW_CHECK) {
 			return Integer.MAX_VALUE;
 		}
 
-		return (int) maximal;
+		return (int) (value * GTCEFE.RATIO);
 	}
 
 	@Override

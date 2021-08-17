@@ -1,0 +1,8 @@
+chat.pipe.power.iron.mode=Switched to %d RF/t limit
+
+buildcraft.mj.static.long=%s Redstone Flux
+buildcraft.mj.static.short=%s RF
+buildcraft.mj.flow.long=%s Redstone Flux per tick
+buildcraft.mj.flow.short=%s RF/t
+buildcraft.mj.flow.seconds.long=%s Redstone Flux per second
+buildcraft.mj.flow.seconds.short=%s RF/s

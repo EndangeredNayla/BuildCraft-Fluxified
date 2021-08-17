@@ -1,4 +1,3 @@
-
 // Copyright (C) 2018 DBot
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,7 +17,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-package ru.dbotthepony.mc.gtcefe.mj;
+package com.unicornora.buildcraftfluxified.mj;
 
 import buildcraft.api.mj.MjAPI;
 import net.minecraft.tileentity.TileEntity;
@@ -26,7 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
-import ru.dbotthepony.mc.gtcefe.BCFE;
+import com.unicornora.buildcraftfluxified.BCFE;
 
 public class EnergyProviderMJ implements ICapabilityProvider {
 	private final TileEntity upvalue;

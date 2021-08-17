@@ -18,11 +18,11 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-package ru.dbotthepony.mc.gtcefe;
+package com.unicornora.buildcraftfluxified;
 
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.item.ItemStack;
+import buildcraft.api.mj.MjAPI;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,48 +32,43 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import ru.dbotthepony.mc.gtcefe.eu.EnergyProvider;
-import ru.dbotthepony.mc.gtcefe.eu.EnergyProviderItem;
+import com.unicornora.buildcraftfluxified.mj.EnergyProviderMJ;
+import com.unicornora.buildcraftfluxified.BCFEConfig;
 
 @Mod(
-	modid = GTCEFE.MODID,
-	name = GTCEFE.NAME,
-	dependencies = "after:gregtech;",
-	version = GTCEFE.VERSION)
-public class GTCEFE {
-	public static final String MODID = "gtcefe";
-	public static final String NAME = "GregTechCE FE Adapter";
-	public static final String VERSION = "1.1-1.8.5.436";
-	public static final long RATIO = 4;
-	public static final int RATIO_INT = 4;
+	modid = BCFE.MODID,
+	name = BCFE.NAME,
+	dependencies = "after:buildcraft;",
+	version = BCFE.VERSION)
+public class BCFE {
+	public static final String MODID = "bcfe";
+	public static final String NAME = "BuildCraft FE Adapter";
+	public static final String VERSION = "1.1";
+
 	public ResourceLocation resourceLocation;
 	public static Logger logger;
 
-	public static final long MAX_VALUE_AS_LONG = Long.MAX_VALUE / RATIO;
-	public static final long OVERFLOW_CHECK = Integer.MAX_VALUE / RATIO;
-	public static final int MAX_VALUE_AS_INT = Integer.MAX_VALUE / RATIO_INT;
+	public static long conversionRatio() {
+		return MjAPI.ONE_MINECRAFT_JOULE / BCFEConfig.RATIO;
+	}
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		resourceLocation = new ResourceLocation(GTCEFE.MODID, "fecapability");
+		resourceLocation = new ResourceLocation(BCFE.MODID, "fecapability");
 		logger = event.getModLog();
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		if (!Loader.isModLoaded("gregtech")) {
+		if (!Loader.isModLoaded("buildcraftcore")) {
 			return;
 		}
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	@SubscribeEvent
-	public void attachTileCapability(AttachCapabilitiesEvent<TileEntity> event) {
-		event.addCapability(resourceLocation, new EnergyProvider(event.getObject()));
-	}
 
 	@SubscribeEvent
-	public void attachItemCapability(AttachCapabilitiesEvent<ItemStack> event) {
-		event.addCapability(resourceLocation, new EnergyProviderItem(event.getObject()));
+	public void attachTileCapability(AttachCapabilitiesEvent<TileEntity> event) {
+		event.addCapability(resourceLocation, new EnergyProviderMJ(event.getObject()));
 	}
 }

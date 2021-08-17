@@ -1,4 +1,3 @@
-
 // Copyright (C) 2018 DBot
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,7 +17,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-package ru.dbotthepony.mc.gtcefe.mj;
+package com.unicornora.buildcraftfluxified.mj;
 
 import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.IMjPassiveProvider;
